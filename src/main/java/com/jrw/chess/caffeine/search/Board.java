@@ -45,8 +45,6 @@ public final class Board {
       Stream.generate(StackItem::new).limit(MAX_PLY * 2).toArray(StackItem[]::new);
   private int ply;
 
-  private int[] tmp_king = new int[2];
-
   public Board(final String fen) {
     setup(fen);
   }
@@ -151,8 +149,7 @@ public final class Board {
   }
 
   public int king(final int side) {
-    // return peek(kings(side));
-    return tmp_king[side];
+    return peek(kings(side));
   }
 
   public int piece(final int square) {
@@ -291,8 +288,6 @@ public final class Board {
     sideBitboards[side] ^= bitboard;
     pieceBitboards[piece] ^= bitboard;
     pieces[square] = piece;
-
-    if (piece == KING) tmp_king[side] = square;
   }
 
   private void clear(final int side, final int piece, final int square) {
@@ -310,8 +305,6 @@ public final class Board {
     pieceBitboards[piece] ^= bitboard;
     pieces[source] = NO_PIECE;
     pieces[target] = piece;
-
-    if (piece == KING) tmp_king[side] = target;
   }
 
   private long computeCheckers() {

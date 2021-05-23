@@ -1,5 +1,7 @@
 package com.jrw.chess.caffeine.search;
 
+import com.jrw.chess.caffeine.core.Piece;
+import com.jrw.chess.caffeine.core.Square;
 import lombok.experimental.UtilityClass;
 
 import static com.jrw.chess.caffeine.core.Piece.*;
@@ -14,6 +16,7 @@ public class Move {
   private final int SOURCE_SHIFT = 0;
   private final int TARGET_SHIFT = SOURCE_SHIFT + Integer.bitCount(SOURCE_MASK);
   private final int PROMOTION_SHIFT = TARGET_SHIFT + Integer.bitCount(TARGET_MASK);
+  private final String MOVE_FORMAT = "%s%s%s";
 
   public int create(final int source, final int target) {
     return create(source, target, NO_PIECE);
@@ -33,5 +36,13 @@ public class Move {
 
   public int promotion(final int move) {
     return (move >>> PROMOTION_SHIFT) & PROMOTION_MASK;
+  }
+
+  public String string(final int move) {
+    return String.format(
+        MOVE_FORMAT,
+        Square.string(source(move)),
+        Square.string(target(move)),
+        Piece.string(promotion(move)));
   }
 }
