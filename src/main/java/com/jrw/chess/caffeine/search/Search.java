@@ -1,6 +1,5 @@
 package com.jrw.chess.caffeine.search;
 
-
 import java.io.PrintStream;
 import java.util.stream.Stream;
 
