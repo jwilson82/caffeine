@@ -1,6 +1,5 @@
 package com.jrw.chess.caffeine.search;
 
-import lombok.RequiredArgsConstructor;
 
 import java.io.PrintStream;
 import java.util.stream.Stream;
@@ -28,7 +27,7 @@ public final class Search {
   }
 
   private int search(final int ply, final int depth, int alpha, int beta) {
-    if(depth <= 0) return 0;
+    if (depth <= 0) return 0;
 
     int bestScore = ply - MATE;
     int legalMoveCount = 0;
@@ -36,39 +35,34 @@ public final class Search {
 
     alpha = max(ply - MATE, alpha);
     beta = min(MATE - ply + 1, beta);
-    if(alpha >= beta) {
+    if (alpha >= beta) {
       return alpha;
     }
 
     stack[ply].moves.setup();
-    while((move = stack[ply].moves.next()) != NO_MOVE) {
+    while ((move = stack[ply].moves.next()) != NO_MOVE) {
       legalMoveCount++;
       board.make(move);
       final int score = -search(ply + 1, depth - 1, -beta, -alpha);
       board.undo(move);
 
-      if(score >= beta) {
+      if (score >= beta) {
         return beta;
-      }
-      else if(score > alpha) {
+      } else if (score > alpha) {
         bestScore = score;
         alpha = score;
 
-        if(ply == 0) {
-          out.printf("info depth %d score %s time %d nodes %d pv %s%n",
-                  depth,
-                  uciScore(score),
-                  0L,
-                  0L,
-                  Move.string(move));
+        if (ply == 0) {
+          out.printf(
+              "info depth %d score %s time %d nodes %d pv %s%n",
+              depth, uciScore(score), 0L, 0L, Move.string(move));
         }
-      }
-      else if(score > bestScore) {
+      } else if (score > bestScore) {
         bestScore = score;
       }
     }
 
-    if(legalMoveCount == 0 && !board.inCheck()) {
+    if (legalMoveCount == 0 && !board.inCheck()) {
       bestScore = 0;
     }
 
@@ -76,7 +70,7 @@ public final class Search {
   }
 
   private String uciScore(final int score) {
-    if(abs(score) >= MATE - MAX_PLY) {
+    if (abs(score) >= MATE - MAX_PLY) {
       return "mate " + (score > 0 ? (MATE - score + 1) / 2 : -(score + MATE + 1) / 2);
     }
     return "cp " + score;

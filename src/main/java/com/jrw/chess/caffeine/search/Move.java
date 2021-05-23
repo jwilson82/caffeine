@@ -39,9 +39,10 @@ public class Move {
   }
 
   public String string(final int move) {
-    return String.format(MOVE_FORMAT,
-            Square.string(source(move)),
-            Square.string(target(move)),
-            Piece.string(promotion(move)));
+    return String.format(
+        MOVE_FORMAT,
+        Square.string(source(move)),
+        Square.string(target(move)),
+        Piece.string(promotion(move)));
   }
 }
